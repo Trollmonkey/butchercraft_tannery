@@ -2,7 +2,7 @@
   "itemGroup.butchercrafttannery": "Example Mod Tab",
   "block.butchercrafttannery.example_block": "Example Block",
   "item.butchercrafttannery.example_item": "Example Item",
-  "item.butchercraftaddon.hide": "Hide"
+  "item.butchercrafttannery.hide": "Hide"
   "butchercrafttannery.configuration.title": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml.title": "Butchercraft Tannery Configs",
