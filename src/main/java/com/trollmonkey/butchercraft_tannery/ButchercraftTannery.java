@@ -53,7 +53,9 @@ public class ButchercraftTannery {
     // Creates a new food item with the id "butchercrafttannery:example_id", nutrition 1 and saturation 2
     public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", new Item.Properties().food(new FoodProperties.Builder()
             .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
-
+    // Our Hide item (non-food)
+    public static final DeferredItem<Item> HIDE =
+            ITEMS.registerSimpleItem("hide", new Item.Properties());
     // Creates a creative tab with the id "butchercrafttannery:example_tab" for the example item, that is placed after the combat tab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.butchercrafttannery")) //The language key for the title of your CreativeModeTab
@@ -105,6 +107,10 @@ public class ButchercraftTannery {
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EXAMPLE_BLOCK_ITEM);
+        }
+        // Hide item in Ingredients tab (for convenience)
+        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(HIDE);
         }
     }
 
