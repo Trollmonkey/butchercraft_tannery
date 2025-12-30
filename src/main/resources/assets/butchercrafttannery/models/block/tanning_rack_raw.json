@@ -1,0 +1,7 @@
+{
+  "parent": "butchercrafttannery:block/tanning_rack_empty",
+  "textures": {
+    "particle": "minecraft:block/oak_planks",
+    "frame": "minecraft:block/oak_planks"
+  }
+}

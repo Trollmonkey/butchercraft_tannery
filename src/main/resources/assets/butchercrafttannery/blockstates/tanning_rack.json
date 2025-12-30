@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "stage=empty":   { "model": "butchercrafttannery:block/tanning_rack_empty" },
+    "stage=raw":     { "model": "butchercrafttannery:block/tanning_rack_raw" },
+    "stage=scraped": { "model": "butchercrafttannery:block/tanning_rack_scraped" },
+    "stage=leather": { "model": "butchercrafttannery:block/tanning_rack_leather" }
+  }
+}

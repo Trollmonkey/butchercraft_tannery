@@ -57,16 +57,19 @@ public class ButchercraftTannery {
     public static final DeferredItem<Item> HIDE =
             ITEMS.registerSimpleItem("hide", new Item.Properties());
     // Tanning Rack Block
-    public static final DeferredBlock<Block> TANNING_RACK =
-            BLOCKS.registerSimpleBlock("tanning_rack",
-                    BlockBehaviour.Properties.of()
-                            .mapColor(MapColor.WOOD)
-                            .strength(1.0f)
-                            .noOcclusion() // allows non-full-block models later
-            );
+    public static final DeferredBlock<TanningRackBlock> TANNING_RACK =
+            BLOCKS.register("tanning_rack",
+                    () -> new TanningRackBlock(
+                            BlockBehaviour.Properties.of()
+                                    .mapColor(MapColor.WOOD)
+                                    .strength(1.0f)
+                                    .noOcclusion()
+                    ));
+
     // Tanning Rack Block Item
     public static final DeferredItem<BlockItem> TANNING_RACK_ITEM =
             ITEMS.registerSimpleBlockItem("tanning_rack", TANNING_RACK);
+
     // Creates a creative tab with the id "butchercrafttannery:example_tab" for the example item, that is placed after the combat tab
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.butchercrafttannery")) //The language key for the title of your CreativeModeTab
