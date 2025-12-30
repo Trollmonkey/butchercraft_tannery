@@ -3,6 +3,8 @@
   "block.butchercrafttannery.example_block": "Example Block",
   "item.butchercrafttannery.example_item": "Example Item",
   "item.butchercrafttannery.hide": "Hide",
+  "item.butchercrafttannery.raw_hide": "Raw Hide",
+  "item.butchercrafttannery.scraped_hide": "Scraped Hide",
   "butchercrafttannery.configuration.title": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml.title": "Butchercraft Tannery Configs",

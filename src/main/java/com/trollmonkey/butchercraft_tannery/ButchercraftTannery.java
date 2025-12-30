@@ -56,6 +56,15 @@ public class ButchercraftTannery {
     // Our Hide item (non-food)
     public static final DeferredItem<Item> HIDE =
             ITEMS.registerSimpleItem("hide", new Item.Properties());
+
+    // Raw Hide item (freshly peeled)
+    public static final DeferredItem<Item> RAW_HIDE =
+            ITEMS.registerSimpleItem("raw_hide", new Item.Properties());
+
+    // Scraped Hide item (cleaned)
+    public static final DeferredItem<Item> SCRAPED_HIDE =
+            ITEMS.registerSimpleItem("scraped_hide", new Item.Properties());
+
     // Tanning Rack Block
     public static final DeferredBlock<TanningRackBlock> TANNING_RACK =
             BLOCKS.register("tanning_rack",
@@ -122,15 +131,13 @@ public class ButchercraftTannery {
         if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
             event.accept(EXAMPLE_BLOCK_ITEM);
         }
-        // Hide item in Ingredients tab (for convenience)
+        // Tannery items in Ingredients tab (for convenience)
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(HIDE);
-        }
-        // Tanning Rack in Ingredients tab (temporary)
-        if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
+            event.accept(RAW_HIDE);
+            event.accept(SCRAPED_HIDE);
             event.accept(TANNING_RACK_ITEM);
         }
-
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
