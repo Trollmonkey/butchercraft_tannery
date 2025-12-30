@@ -21,6 +21,17 @@ public class TanningRackBlockEntity extends BlockEntity {
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, TanningRackBlockEntity be) {
+    if (level.isClientSide) return;
+
+    TanningRackBlock.Stage stage = state.getValue(TanningRackBlock.STAGE);
+
+    if (stage == TanningRackBlock.Stage.SCRAPED) {
+        boolean hasSmoke = hasCampfireSmoke(level, pos);
+        boolean hasSky = level.canSeeSky(pos);
+        boolean isDay = level.isDay();
+
+        boolean canTan = hasSmoke && hasSky && isDay;
+
         ButchercraftTannery.LOGGER.info(
                 "[Tannery] Tick at {}, stage={}, progress={}, smoke={}",
                 pos,
@@ -28,41 +39,33 @@ public class TanningRackBlockEntity extends BlockEntity {
                 be.progress,
                 hasCampfireSmoke(level, pos)
         );
-        if (level.isClientSide()) return;
 
-        TanningRackBlock.Stage stage = state.getValue(TanningRackBlock.STAGE);
+        if (canTan) {
+            // Actively tanning
+            be.progress++;
 
-        // Only care about SCRAPED state for tanning
-        if (stage == TanningRackBlock.Stage.SCRAPED) {
-            boolean hasSmoke = hasCampfireSmoke(level, pos);
-
-            if (hasSmoke) {
-                // Actively tanning
-                be.progress++;
-
-                if (be.progress >= MAX_PROGRESS) {
-                    be.progress = 0;
-                    level.setBlock(
-                            pos,
-                            state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.LEATHER),
-                            3
-                    );
-                }
-
-                be.setChanged();
-            } else {
-                // No smoke: pause progress, but don't reset
-                // (do nothing here)
-            }
-
-        } else {
-            // Any non-SCRAPED stage: reset progress if needed
-            if (be.progress != 0) {
+            if (be.progress >= MAX_PROGRESS) {
                 be.progress = 0;
-                be.setChanged();
+                level.setBlock(
+                        pos,
+                        state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.LEATHER),
+                        3
+                );
             }
+
+            be.setChanged();
+        } else {
+            // Conditions not met: pause progress, but don't reset
+        }
+
+    } else {
+        // Any non-SCRAPED stage: reset progress if needed
+        if (be.progress != 0) {
+            be.progress = 0;
+            be.setChanged();
         }
     }
+}
 
     // Must be two blocks over a campfire: rack at Y, gap at Y-1, campfire at Y-2
     private static boolean hasCampfireSmoke(Level level, BlockPos pos) {
