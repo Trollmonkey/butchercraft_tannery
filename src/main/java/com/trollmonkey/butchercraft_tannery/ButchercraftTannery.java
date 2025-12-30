@@ -100,7 +100,8 @@ public class ButchercraftTannery {
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
-
+        // Register Block Entities
+        ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ButchercraftTannery) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
@@ -111,6 +112,7 @@ public class ButchercraftTannery {
 
         // Register our mod's ModConfigSpec so that FML can create and load the config file for us
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        // Telling the mod to register Block Entities
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {

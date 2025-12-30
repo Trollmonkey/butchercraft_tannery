@@ -13,12 +13,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class TanningRackBlock extends Block {
+import javax.annotation.Nullable;
+
+public class TanningRackBlock extends Block implements EntityBlock {
 
     public static final EnumProperty<Stage> STAGE =
             EnumProperty.create("stage", Stage.class);
@@ -106,12 +112,38 @@ public class TanningRackBlock extends Block {
             return InteractionResult.CONSUME;
         }
 
-        // SCRAPED with tools / anything else → handled later when we add tanning logic
+        // SCRAPED with tools / anything else → handled later (tanning logic is in the BE)
         return InteractionResult.PASS;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(STAGE);
+    }
+
+    // ----- Block Entity plumbing -----
+
+    @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new TanningRackBlockEntity(pos, state);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+            Level level,
+            BlockState state,
+            BlockEntityType<T> type
+    ) {
+        if (type != ModBlockEntities.TANNING_RACK.get()) {
+            return null;
+        }
+
+        return (lvl, pos, st, be) -> {
+            if (be instanceof TanningRackBlockEntity rackBe) {
+                TanningRackBlockEntity.tick(lvl, pos, st, rackBe);
+            }
+        };
     }
 }
