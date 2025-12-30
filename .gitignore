@@ -1,0 +1,18 @@
+# Build and gradle cache
+.gradle/
+build/
+out/
+
+# IntelliJ project files
+*.iml
+.idea/
+
+# Runtime logs
+logs/
+run/
+debug/
+crash-reports/
+
+# OS junk
+Thumbs.db
+.DS_Store
