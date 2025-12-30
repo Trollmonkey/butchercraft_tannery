@@ -4,13 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class TanningRackBlockEntity extends BlockEntity {
 
-    // Simple progress counter
-    private int progress = 0;
+    // Tracks tanning progress
+    int progress = 0;
     // For now: 60 seconds (20 ticks/sec * 60)
     private static final int MAX_PROGRESS = 20 * 60;
 
@@ -18,33 +19,56 @@ public class TanningRackBlockEntity extends BlockEntity {
         super(ModBlockEntities.TANNING_RACK.get(), pos, state);
     }
 
-    // Called every tick by the ticker in TanningRackBlock
     public static void tick(Level level, BlockPos pos, BlockState state, TanningRackBlockEntity be) {
+        ButchercraftTannery.LOGGER.info(
+                "[Tannery] Tick at {}, stage={}, progress={}, smoke={}",
+                pos,
+                state.getValue(TanningRackBlock.STAGE),
+                be.progress,
+                hasCampfireSmoke(level, pos)
+        );
         if (level.isClientSide()) return;
 
-        var stage = state.getValue(TanningRackBlock.STAGE);
+        TanningRackBlock.Stage stage = state.getValue(TanningRackBlock.STAGE);
 
+        // Only care about SCRAPED state for tanning
         if (stage == TanningRackBlock.Stage.SCRAPED) {
-            be.progress++;
+            boolean hasSmoke = hasCampfireSmoke(level, pos);
 
-            if (be.progress >= MAX_PROGRESS) {
-                be.progress = 0;
-                level.setBlock(
-                        pos,
-                        state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.LEATHER),
-                        3
-                );
+            if (hasSmoke) {
+                // Actively tanning
+                be.progress++;
+
+                if (be.progress >= MAX_PROGRESS) {
+                    be.progress = 0;
+                    level.setBlock(
+                            pos,
+                            state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.LEATHER),
+                            3
+                    );
+                }
+
+                be.setChanged();
+            } else {
+                // No smoke: pause progress, but don't reset
+                // (do nothing here)
             }
 
-            be.setChanged();
-        } else if (be.progress != 0) {
-            // Reset when we’re no longer in SCRAPED stage
-            be.progress = 0;
-            be.setChanged();
+        } else {
+            // Any non-SCRAPED stage: reset progress if needed
+            if (be.progress != 0) {
+                be.progress = 0;
+                be.setChanged();
+            }
         }
     }
 
-    // 1.21.1 uses *loadAdditional* and *saveAdditional* with a HolderLookup.Provider
+    // Must be two blocks over a campfire: rack at Y, gap at Y-1, campfire at Y-2
+    private static boolean hasCampfireSmoke(Level level, BlockPos pos) {
+        BlockState belowTwo = level.getBlockState(pos.below(2));
+        return belowTwo.is(Blocks.CAMPFIRE) || belowTwo.is(Blocks.SOUL_CAMPFIRE);
+    }
+
     @Override
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
