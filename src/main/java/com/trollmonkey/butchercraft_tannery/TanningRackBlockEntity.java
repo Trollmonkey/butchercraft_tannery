@@ -27,9 +27,8 @@ public class TanningRackBlockEntity extends BlockEntity {
 
     if (stage == TanningRackBlock.Stage.SCRAPED) {
         boolean hasSmoke = hasCampfireSmoke(level, pos);
-        boolean hasSky = level.canSeeSky(pos);
+        boolean hasSky = level.canSeeSky(pos.above());
         boolean isDay = level.isDay();
-
         boolean canTan = hasSmoke && hasSky && isDay;
 
         ButchercraftTannery.LOGGER.info(
