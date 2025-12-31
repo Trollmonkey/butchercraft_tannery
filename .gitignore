@@ -16,3 +16,6 @@ crash-reports/
 # OS junk
 Thumbs.db
 .DS_Store
+
+# Pixelorama Files
+*.pxo

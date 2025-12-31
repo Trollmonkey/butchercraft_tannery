@@ -1,17 +1,6 @@
 {
-  "parent": "block/block",
+  "parent": "minecraft:block/cube_all",
   "textures": {
-    "particle": "minecraft:block/oak_planks",
-    "frame": "minecraft:block/oak_planks"
-  },
-  "elements": [
-    {
-      "from": [ 0, 0, 8 ],
-      "to": [ 16, 16, 9 ],
-      "faces": {
-        "north": { "texture": "#frame" },
-        "south": { "texture": "#frame" }
-      }
-    }
-  ]
+    "all": "butchercrafttannery:block/tanning_rack_empty"
+  }
 }

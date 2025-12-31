@@ -1,7 +1,6 @@
 {
-  "parent": "butchercrafttannery:block/tanning_rack_empty",
+  "parent": "minecraft:block/cube_all",
   "textures": {
-    "particle": "minecraft:block/oak_planks",
-    "frame": "minecraft:block/oak_planks"
+    "all": "butchercrafttannery:block/tanning_rack_scraped"
   }
 }
