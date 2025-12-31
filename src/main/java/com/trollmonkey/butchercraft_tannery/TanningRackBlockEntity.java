@@ -7,14 +7,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import com.trollmonkey.butchercraft_tannery.ButchercraftTannery;
 
 public class TanningRackBlockEntity extends BlockEntity {
 
     // Tracks tanning progress
     int progress = 0;
-    // For now: 60 seconds (20 ticks/sec * 60)
-    private static final int MAX_PROGRESS = 20 * 60;
 
     public TanningRackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TANNING_RACK.get(), pos, state);
@@ -31,6 +28,37 @@ public class TanningRackBlockEntity extends BlockEntity {
         boolean isDay = level.isDay();
         boolean canTan = hasSmoke && hasSky && isDay;
 
+        // --- Weather Interaction ---
+        boolean exposed = level.canSeeSky(pos.above());
+
+        if (exposed && level.isRainingAt(pos)) {
+            boolean isThunder = level.isThundering();
+            double roll = Math.random(); // 0.0 - 1.0
+
+            if (isThunder) {
+                // Thunderstorm → guaranteed ruin
+                be.progress = 0;
+                level.setBlock(pos, state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.EMPTY), 3);
+                be.setChanged();
+                return;
+            } else {
+                // Rain-only → 60% reset, 40% ruin
+                if (roll < 0.4) { // 40% ruin
+                    be.progress = 0;
+                    level.setBlock(pos, state.setValue(TanningRackBlock.STAGE, TanningRackBlock.Stage.EMPTY), 3);
+                    be.setChanged();
+                    return;
+                } else { // 60% reset, stay SCRAPED
+                    if (be.progress != 0) {
+                        be.progress = 0;
+                        be.setChanged();
+                    }
+                    /* Do not return; just skip tanning this tick
+                    so execution can continue to canTan check below */
+                }
+            }
+        }
+        //Log our smoking progress for testing REMOVE WHEN DONE!
         ButchercraftTannery.LOGGER.info(
                 "[Tannery] Tick at {}, stage={}, progress={}, smoke={}",
                 pos,
@@ -38,12 +66,14 @@ public class TanningRackBlockEntity extends BlockEntity {
                 be.progress,
                 hasCampfireSmoke(level, pos)
         );
-
+        //Smoke + Sun + Sky = Proceed With Tanning. Otherwise, pause.
         if (canTan) {
             // Actively tanning
             be.progress++;
 
-            if (be.progress >= MAX_PROGRESS) {
+            int maxProgress = Config.TANNING_TIME_TICKS.get();  // read from config
+
+            if (be.progress >= maxProgress) {
                 be.progress = 0;
                 level.setBlock(
                         pos,
@@ -53,8 +83,6 @@ public class TanningRackBlockEntity extends BlockEntity {
             }
 
             be.setChanged();
-        } else {
-            // Conditions not met: pause progress, but don't reset
         }
 
     } else {

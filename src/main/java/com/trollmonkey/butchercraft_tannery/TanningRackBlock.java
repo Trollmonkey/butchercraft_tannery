@@ -70,7 +70,7 @@ public class TanningRackBlock extends Block implements EntityBlock {
         ItemStack stack = player.getMainHandItem();
         Stage stage = state.getValue(STAGE);
 
-        // EMPTY rack → place hides
+        // EMPTY rack → place raw hide
         if (stage == Stage.EMPTY) {
             if (stack.is(ButchercraftTannery.RAW_HIDE.get())) {
                 level.setBlock(pos, state.setValue(STAGE, Stage.RAW), Block.UPDATE_ALL);
@@ -85,7 +85,7 @@ public class TanningRackBlock extends Block implements EntityBlock {
             return InteractionResult.PASS;
         }
 
-        // RAW stage → scrape with knives / tools
+        // RAW stage → scrape with knives / fleshing tool
         if (stage == Stage.RAW) {
             if (stack.is(SCRAPING_TOOLS)) {
                 level.setBlock(pos, state.setValue(STAGE, Stage.SCRAPED), Block.UPDATE_ALL);
@@ -115,7 +115,6 @@ public class TanningRackBlock extends Block implements EntityBlock {
         // SCRAPED with tools / anything else → handled later (tanning logic is in the BE)
         return InteractionResult.PASS;
     }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(STAGE);
@@ -128,7 +127,6 @@ public class TanningRackBlock extends Block implements EntityBlock {
         return new TanningRackBlockEntity(pos, state);
     }
 
-    @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(

@@ -13,9 +13,12 @@ public class ModBlockEntities {
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<TanningRackBlockEntity>> TANNING_RACK =
             BLOCK_ENTITIES.register(
                     "tanning_rack",
-                    () -> BlockEntityType.Builder.of(
-                            TanningRackBlockEntity::new,
-                            ButchercraftTannery.TANNING_RACK.get()
-                    ).build(null)
+                    () -> {
+                        /* Datafixer type: we don't use DFU, null is the correct value here. */
+                        // noinspection ConstantConditions
+                        return BlockEntityType.Builder
+                                .of(TanningRackBlockEntity::new, ButchercraftTannery.TANNING_RACK.get())
+                                .build(null);
+                    }
             );
 }
