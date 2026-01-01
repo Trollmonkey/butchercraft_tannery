@@ -1,6 +1,7 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
+	"render_type": "cutout",
 	"textures": {
 		"0": "butchercrafttannery:block/tanning_rack_frame",
 		"particle": "butchercrafttannery:block/tanning_rack_frame"
