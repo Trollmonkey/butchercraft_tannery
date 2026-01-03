@@ -58,14 +58,14 @@ public class TanningRackBlockEntity extends BlockEntity {
                 }
             }
         }
-        //Log our smoking progress for testing REMOVE WHEN DONE!
+        /*Log our smoking progress for testing REMOVE WHEN DONE!
         ButchercraftTannery.LOGGER.info(
                 "[Tannery] Tick at {}, stage={}, progress={}, smoke={}",
                 pos,
                 state.getValue(TanningRackBlock.STAGE),
                 be.progress,
                 hasCampfireSmoke(level, pos)
-        );
+        )*/
         //Smoke + Sun + Sky = Proceed With Tanning. Otherwise, pause.
         if (canTan) {
             // Actively tanning
