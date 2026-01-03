@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SXS",
+    "SXS",
+    "SXS"
+  ],
+  "key": {
+    "S": { "item": "minecraft:stick" },
+    "X": { "item": "butchercraft:sinew" }
+  },
+  "result": {
+    "id": "butchercrafttannery:tanning_rack",
+    "count": 1
+  }
+}
