@@ -26,4 +26,4 @@ blockbench/
 *.bbmodel
 
 # Logo
-/logo
+logo/
