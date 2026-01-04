@@ -1,8 +1,23 @@
 {
   "variants": {
-    "stage=empty":   { "model": "butchercrafttannery:block/tanning_rack_empty" },
-    "stage=raw":     { "model": "butchercrafttannery:block/tanning_rack_raw" },
-    "stage=scraped": { "model": "butchercrafttannery:block/tanning_rack_scraped" },
-    "stage=leather": { "model": "butchercrafttannery:block/tanning_rack_leather" }
+    "facing=north,stage=empty":   { "model": "butchercrafttannery:block/tanning_rack_empty" },
+    "facing=south,stage=empty":   { "model": "butchercrafttannery:block/tanning_rack_empty", "y": 180 },
+    "facing=west,stage=empty":    { "model": "butchercrafttannery:block/tanning_rack_empty", "y": 270 },
+    "facing=east,stage=empty":    { "model": "butchercrafttannery:block/tanning_rack_empty", "y": 90 },
+
+    "facing=north,stage=raw":     { "model": "butchercrafttannery:block/tanning_rack_raw" },
+    "facing=south,stage=raw":     { "model": "butchercrafttannery:block/tanning_rack_raw", "y": 180 },
+    "facing=west,stage=raw":      { "model": "butchercrafttannery:block/tanning_rack_raw", "y": 270 },
+    "facing=east,stage=raw":      { "model": "butchercrafttannery:block/tanning_rack_raw", "y": 90 },
+
+    "facing=north,stage=scraped": { "model": "butchercrafttannery:block/tanning_rack_scraped" },
+    "facing=south,stage=scraped": { "model": "butchercrafttannery:block/tanning_rack_scraped", "y": 180 },
+    "facing=west,stage=scraped":  { "model": "butchercrafttannery:block/tanning_rack_scraped", "y": 270 },
+    "facing=east,stage=scraped":  { "model": "butchercrafttannery:block/tanning_rack_scraped", "y": 90 },
+
+    "facing=north,stage=leather": { "model": "butchercrafttannery:block/tanning_rack_leather" },
+    "facing=south,stage=leather": { "model": "butchercrafttannery:block/tanning_rack_leather", "y": 180 },
+    "facing=west,stage=leather":  { "model": "butchercrafttannery:block/tanning_rack_leather", "y": 270 },
+    "facing=east,stage=leather":  { "model": "butchercrafttannery:block/tanning_rack_leather", "y": 90 }
   }
 }

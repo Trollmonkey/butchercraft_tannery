@@ -1,6 +1,7 @@
 {
   "item.butchercrafttannery.raw_hide": "Raw Hide",
   "item.butchercrafttannery.scraped_hide": "Scraped Hide",
+  "item.butchercrafttannery.tanning_rack": "Tanning Rack",
   "butchercrafttannery.configuration.title": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml.title": "Butchercraft Tannery Configs"
