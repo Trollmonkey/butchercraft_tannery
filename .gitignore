@@ -24,3 +24,6 @@ pixelorama/
 # Blockbench models
 blockbench/
 *.bbmodel
+
+# Logo
+/logo

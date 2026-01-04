@@ -1,8 +1,39 @@
-This is the home of my tanning addon for Butchercraft 1.21.1 (Neoforge).
+# Butchercraft: Tannery
 
-This mod is an addon for Butchercraft by Lance5057 and is licensed under CC BY-NC-SA 4.0, the same license as the original project. Not affiliated with or endorsed by the original authors.
+An addon mod for Butchercraft that adds functional hide tanning using a new Tanning Rack.
 
-## 🧾 License
+## What This Mod Adds
+
+- A Tanning Rack block
+- A multi-stage hide processing workflow:
+    - Raw Hide → Scraped Hide → Leather
+- Integration with Butchercraft entity drops
+
+## Requirements
+
+- Minecraft 1.21.1
+- NeoForge
+- Butchercraft
+
+## How It Works
+
+Replaces the leather dropped from Butchercraft meat hooks with Raw Hides.  These will need to 
+be processed on the new Tanning Rack.  
+- Make sure you place your rack in the sunlight, two blocks over a campfire.
+- Right-click the Raw Hide onto the Tanning Rack and scrape it clean with a knife.  
+- In 60 seconds (configurable), your hide will cure into ready to use leather.
+
+## Compatibility
+
+- Designed specifically for Butchercraft.
+- Works with most knives using modern tagging standards.
+
+## Notes
+
+- Some loot table paths intentionally overwrite Butchercraft data for integration purposes.
+
+## License
+
 This project, **Butchercraft: Tannery**, is licensed under the
 **CC BY-NC-SA 4.0 International License**, matching the license of
 the original mod **Butchercraft** by **Lance5057**.
