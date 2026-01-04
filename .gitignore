@@ -21,4 +21,5 @@ Thumbs.db
 *.pxo
 
 # Blockbench models
+blockbench/
 *.bbmodel
