@@ -88,6 +88,8 @@ public class ButchercraftTannery {
         if (event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
             event.accept(RAW_HIDE);
             event.accept(SCRAPED_HIDE);
+        }
+        if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
             event.accept(TANNING_RACK_ITEM);
         }
     }
