@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "butchercraft:butcher_knife",
+    "butchercraft:skinning_knife",
     "#farmersdelight:tools/knives",
     "#c:tools/knife"
   ]
