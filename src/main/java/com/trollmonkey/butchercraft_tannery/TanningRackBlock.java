@@ -132,6 +132,25 @@ public class TanningRackBlock extends Block implements EntityBlock {
         return InteractionResult.PASS;
     }
     @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide) {
+            /* Always drop the rack itself */
+            popResource(level, pos, new ItemStack(this.asItem()));
+
+            /* Drop the “contents” based on stage */
+            Stage stage = state.getValue(STAGE);
+            switch (stage) {
+                case RAW -> popResource(level, pos, new ItemStack(ButchercraftTannery.RAW_HIDE.get()));
+                case SCRAPED -> popResource(level, pos, new ItemStack(ButchercraftTannery.SCRAPED_HIDE.get()));
+                case LEATHER -> popResource(level, pos, new ItemStack(Items.LEATHER));
+                default -> { /* EMPTY -> nothing extra */ }
+            }
+        }
+
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, STAGE);
     }
