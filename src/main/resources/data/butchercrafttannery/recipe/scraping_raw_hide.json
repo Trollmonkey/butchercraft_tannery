@@ -1,0 +1,7 @@
+{
+  "type": "butchercrafttannery:scraping",
+  "input": { "item": "butchercrafttannery:raw_hide" },
+  "tool": { "tag": "butchercrafttannery:scraping_tools" },
+  "result": { "id": "butchercrafttannery:scraped_hide", "count": 1 },
+  "tool_damage": 1
+}

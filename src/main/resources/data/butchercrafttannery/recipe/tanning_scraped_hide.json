@@ -1,0 +1,6 @@
+{
+  "type": "butchercrafttannery:tanning",
+  "input": { "item": "butchercrafttannery:scraped_hide" },
+  "result": { "id": "minecraft:leather", "count": 1 },
+  "time": 1200
+}

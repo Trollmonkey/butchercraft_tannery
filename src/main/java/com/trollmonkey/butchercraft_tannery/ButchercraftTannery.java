@@ -18,6 +18,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
+import com.trollmonkey.butchercraft_tannery.registry.ModRecipeSerializers;
+import com.trollmonkey.butchercraft_tannery.registry.ModRecipeTypes;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(ButchercraftTannery.MODID)
@@ -69,6 +71,10 @@ public class ButchercraftTannery {
         CREATIVE_MODE_TABS.register(modEventBus);
         // Register Block Entities
         ModBlockEntities.BLOCK_ENTITIES.register(modEventBus);
+        //Register Recipe
+        ModRecipeTypes.RECIPE_TYPES.register(modEventBus);
+        //Register Recipe Serializers
+        ModRecipeSerializers.RECIPE_SERIALIZERS.register(modEventBus);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);

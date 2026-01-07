@@ -27,3 +27,6 @@ blockbench/
 
 # Logo
 logo/
+
+# Archives
+*.zip
