@@ -5,5 +5,7 @@
   "block.butchercrafttannery.tanning_rack": "Tanning Rack",
   "butchercrafttannery.configuration.title": "Butchercraft Tannery Configs",
   "butchercrafttannery.configuration.section.butchercrafttannery.common.toml": "Butchercraft Tannery Configs",
-  "butchercrafttannery.configuration.section.butchercrafttannery.common.toml.title": "Butchercraft Tannery Configs"
+  "butchercrafttannery.configuration.section.butchercrafttannery.common.toml.title": "Butchercraft Tannery Configs",
+  "emi.category.butchercrafttannery.scraping": "Tannery: Scraping",
+  "emi.category.butchercrafttannery.tanning": "Tannery: Tanning"
 }
