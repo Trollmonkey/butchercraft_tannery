@@ -31,6 +31,13 @@ public class TanningRackBlockEntity extends BlockEntity {
         return held.isEmpty();
     }
 
+    private boolean wasRainExposed = false;
+    private boolean wasThunderExposed = false;
+
+    // 0 = none, 1 = reset, 2 = ruin
+
+    private byte rainOutcome = 0;
+
     public void setHeld(ItemStack stack) {
         this.held = stack;
         this.progress = 0;
@@ -41,6 +48,9 @@ public class TanningRackBlockEntity extends BlockEntity {
     public void clearHeld() {
         this.held = ItemStack.EMPTY;
         this.progress = 0;
+        wasRainExposed = false;
+        wasThunderExposed = false;
+        rainOutcome = 0;
         setChanged();
         syncStage();
     }
@@ -89,40 +99,73 @@ public class TanningRackBlockEntity extends BlockEntity {
         var recipe = match.get().value(); // <-- now this is TanningRecipe (typed)
         int maxProgress = recipe.time();
 
-        // --- Your existing environment checks ---
-        boolean hasSmoke = hasCampfireSmoke(level, pos);
-        boolean hasSky = level.canSeeSky(pos.above());
-        boolean isDay = level.isDay();
-        boolean canTan = hasSmoke && hasSky && isDay;
-
-        // --- Weather Interaction (unchanged behavior) ---
+        // --- Environmental Boolean declarations ---
         boolean exposed = level.canSeeSky(pos.above());
+        boolean hasSmoke = hasCampfireSmoke(level, pos);
+        boolean isDay = level.isDay();
+        boolean canTan = hasSmoke && exposed && isDay;
+        boolean rainingHere = exposed && level.isRainingAt(pos.above());
+        boolean thundering = exposed && level.isThundering() && level.isRainingAt(pos.above());
 
-        if (exposed && level.isRainingAt(pos)) {
-            boolean isThunder = level.isThundering();
-            double roll = Math.random(); // 0.0 - 1.0
 
-            if (isThunder) {
-                // Thunderstorm → guaranteed ruin
-                be.progress = 0;
-                be.clearHeld(); // clears item + stage
-                return;
-            } else {
-                // Rain-only → 60% reset, 40% ruin
-                if (roll < 0.4) { // 40% ruin
-                    be.progress = 0;
-                    be.clearHeld();
-                    return;
-                } else { // 60% reset, stay SCRAPED
-                    if (be.progress != 0) {
-                        be.progress = 0;
-                        be.setChanged();
-                    }
-                    // Do not return; just skip tanning this tick (falls through to canTan)
-                }
-            }
+        // --- Thunder: ruin once when thunder exposure starts ---
+        if (thundering && !be.wasThunderExposed) {
+            be.wasThunderExposed = true;
+            be.clearHeld(); 
+            return;
         }
 
+        // If thunder exposure ended, reset flag (so a new thunder event can trigger later)
+        if (!thundering && be.wasThunderExposed) {
+            be.wasThunderExposed = false;
+        }
+        if (thundering) return;
+
+        // --- Rain: roll once when rain exposure starts ---
+        if (rainingHere && !be.wasRainExposed) {
+            be.wasRainExposed = true;
+
+            // Roll once per rain exposure event
+            double roll = level.random.nextDouble(); // use world RNG
+            be.rainOutcome = (byte) (roll < 0.4 ? 2 : 1); // 40% ruin, 60% reset
+
+         if (be.rainOutcome == 2) {
+            // Ruin immediately
+             be.clearHeld();
+                return;
+         } else {
+              // Reset progress immediately, then pause until rain ends
+             if (be.progress != 0) {
+                    be.progress = 0;
+                    be.setChanged();
+                }
+                return; // pause tanning this tick
+            }
+        }
+        
+        // While rain continues: enforce stored outcome, no rerolls
+        if (rainingHere && be.wasRainExposed) {
+            if (be.rainOutcome == 2) {
+                // Should have already ruined, but just in case
+                be.clearHeld();
+                return;
+        } else if (be.rainOutcome == 1) {
+            // Pause tanning until rain ends
+            if (be.progress != 0) {
+                be.progress = 0;
+                 be.setChanged();
+            }
+            return;
+        }
+    }
+
+        // Rain exposure ended (rain stopped or rack covered): clear event + outcome
+        if (!rainingHere && be.wasRainExposed) {
+         be.wasRainExposed = false;
+         be.rainOutcome = 0;
+        }
+
+        
         // Smoke + Sun + Sky = Proceed With Tanning. Otherwise, pause.
         if (canTan) {
             be.progress++;
@@ -149,7 +192,9 @@ public class TanningRackBlockEntity extends BlockEntity {
     public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.loadAdditional(tag, registries);
         this.progress = tag.getInt("Progress");
-
+        wasRainExposed = tag.getBoolean("WasRainExposed");
+        wasThunderExposed = tag.getBoolean("WasThunderExposed");
+        rainOutcome = tag.getByte("RainOutcome");
         if (tag.contains("Held")) {
             this.held = ItemStack.parse(registries, tag.getCompound("Held")).orElse(ItemStack.EMPTY);
         } else {
@@ -161,9 +206,13 @@ public class TanningRackBlockEntity extends BlockEntity {
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
         tag.putInt("Progress", this.progress);
-
+        tag.putBoolean("WasRainExposed", wasRainExposed);
+        tag.putBoolean("WasThunderExposed", wasThunderExposed);
+        tag.putByte("RainOutcome", rainOutcome);
+     
         if (!held.isEmpty()) {
             tag.put("Held", held.save(registries));
+        
         }
     }
 }
