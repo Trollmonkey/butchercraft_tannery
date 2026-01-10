@@ -93,7 +93,8 @@ public class TanningRackBlockEntity extends BlockEntity {
         }
 
         var recipe = match.get().value(); // <-- now this is TanningRecipe (typed)
-        int maxProgress = recipe.time();
+        double multiplier = Config.TANNING_TIME_MULTIPLIER.get();
+        int maxProgress = Math.max(1, (int) Math.ceil(recipe.time() * multiplier));
 
         // --- Environmental Boolean declarations ---
         boolean exposed = level.canSeeSky(pos.above());
