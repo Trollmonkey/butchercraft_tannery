@@ -18,19 +18,15 @@ public class TanningRackBlockEntity extends BlockEntity {
 
     // Tracks tanning progress
     int progress = 0;
-
     public TanningRackBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TANNING_RACK.get(), pos, state);
     }
-
     public ItemStack getHeld() {
         return held;
     }
-
     public boolean isEmpty() {
         return held.isEmpty();
     }
-
     private boolean wasRainExposed = false;
     private boolean wasThunderExposed = false;
 
@@ -121,51 +117,43 @@ public class TanningRackBlockEntity extends BlockEntity {
         }
         if (thundering) return;
 
-        // --- Rain: roll once when rain exposure starts ---
-        if (rainingHere && !be.wasRainExposed) {
-            be.wasRainExposed = true;
+        // Rain Logic
+        if (rainingHere) {
 
-            // Roll once per rain exposure event
-            double roll = level.random.nextDouble(); // use world RNG
-            be.rainOutcome = (byte) (roll < 0.4 ? 2 : 1); // 40% ruin, 60% reset
+            // Rain just started
+            if (!be.wasRainExposed) {
+                be.wasRainExposed = true;
 
-         if (be.rainOutcome == 2) {
-            // Ruin immediately
-             be.clearHeld();
-                return;
-         } else {
-              // Reset progress immediately, then pause until rain ends
-             if (be.progress != 0) {
+                double roll = level.random.nextDouble();
+                be.rainOutcome = (byte) (roll < 0.4 ? 2 : 1); // 40% ruin
+
+                // Rain already in progress (only reset case can reach here)
+                if (be.progress != 0) {
                     be.progress = 0;
                     be.setChanged();
                 }
-                return; // pause tanning this tick
+                return;
             }
-        }
-        
-        // While rain continues: enforce stored outcome, no rerolls
-        if (rainingHere && be.wasRainExposed) {
+
+            // Rain already in progress
             if (be.rainOutcome == 2) {
-                // Should have already ruined, but just in case
                 be.clearHeld();
                 return;
-        } else if (be.rainOutcome == 1) {
-            // Pause tanning until rain ends
-            if (be.progress != 0) {
-                be.progress = 0;
-                 be.setChanged();
+            } else if (be.rainOutcome == 1) {
+                if (be.progress != 0) {
+                    be.progress = 0;
+                    be.setChanged();
+                }
+                return;
             }
-            return;
         }
-    }
 
-        // Rain exposure ended (rain stopped or rack covered): clear event + outcome
+        // Rain ended
         if (!rainingHere && be.wasRainExposed) {
-         be.wasRainExposed = false;
-         be.rainOutcome = 0;
+            be.wasRainExposed = false;
+            be.rainOutcome = 0;
         }
 
-        
         // Smoke + Sun + Sky = Proceed With Tanning. Otherwise, pause.
         if (canTan) {
             be.progress++;
